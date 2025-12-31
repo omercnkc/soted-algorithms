@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sıralama Algoritmaları Görselleştirici | Algorithm Visualizer</title>
+    <meta name="description" content="Interaktif sıralama algoritmaları görselleştirme aracı. Bubble Sort, Insertion Sort, Selection Sort, Merge Sort ve Quick Sort algoritmalarını adım adım öğrenin.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-content">
+                <h1 class="app-title">
+                    <span class="title-icon">🎯</span>
+                    Algoritma Görselleştirici
+                </h1>
+                <p class="app-subtitle">Sıralama algoritmalarını görsel olarak keşfedin</p>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Control Panel -->
+            <aside class="control-panel">
+                <div class="panel-section">
+                    <h2 class="section-title">Algoritma Seçimi</h2>
+                    <div class="algorithm-selector">
+                        <button class="algorithm-btn active" data-algorithm="bubble">
+                            <span class="btn-icon">🫧</span>
+                            <span class="btn-text">Bubble Sort</span>
+                        </button>
+                        <button class="algorithm-btn" data-algorithm="insertion">
+                            <span class="btn-icon">📥</span>
+                            <span class="btn-text">Insertion Sort</span>
+                        </button>
+                        <button class="algorithm-btn" data-algorithm="selection">
+                            <span class="btn-icon">🎯</span>
+                            <span class="btn-text">Selection Sort</span>
+                        </button>
+                        <button class="algorithm-btn" data-algorithm="merge">
+                            <span class="btn-icon">🔀</span>
+                            <span class="btn-text">Merge Sort</span>
+                        </button>
+                        <button class="algorithm-btn" data-algorithm="quick">
+                            <span class="btn-icon">⚡</span>
+                            <span class="btn-text">Quick Sort</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="panel-section">
+                    <h2 class="section-title">Veri Yönetimi</h2>
+                    <div class="data-controls">
+                        <div class="control-group">
+                            <label for="array-size" class="control-label">
+                                Dizi Boyutu: <span id="size-value">20</span>
+                            </label>
+                            <input type="range" id="array-size" class="slider" min="5" max="100" value="20">
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">Veri Tipi</label>
+                            <div class="button-group">
+                                <button class="control-btn active" data-type="random">Rastgele</button>
+                                <button class="control-btn" data-type="reversed">Ters Sıralı</button>
+                                <button class="control-btn" data-type="nearly">Neredeyse Sıralı</button>
+                            </div>
+                        </div>
+
+                        <button class="generate-btn" id="generate-array">
+                            <span class="btn-icon">🔄</span>
+                            Yeni Dizi Oluştur
+                        </button>
+                    </div>
+                </div>
+
+                <div class="panel-section">
+                    <h2 class="section-title">Animasyon Kontrolü</h2>
+                    <div class="animation-controls">
+                        <div class="control-group">
+                            <label for="animation-speed" class="control-label">
+                                Hız: <span id="speed-value">Orta</span>
+                            </label>
+                            <input type="range" id="animation-speed" class="slider" min="1" max="5" value="3">
+                        </div>
+
+                        <div class="playback-controls">
+                            <button class="playback-btn" id="play-btn" title="Başlat">
+                                <span class="icon">▶</span>
+                            </button>
+                            <button class="playback-btn" id="pause-btn" title="Duraklat" disabled>
+                                <span class="icon">⏸</span>
+                            </button>
+                            <button class="playback-btn" id="step-btn" title="Adım Adım">
+                                <span class="icon">⏭</span>
+                            </button>
+                            <button class="playback-btn" id="reset-btn" title="Sıfırla">
+                                <span class="icon">⏹</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel-section">
+                    <h2 class="section-title">Kod Dili</h2>
+                    <div class="language-selector">
+                        <button class="lang-btn active" data-lang="javascript">JavaScript</button>
+                        <button class="lang-btn" data-lang="python">Python</button>
+                        <button class="lang-btn" data-lang="java">Java</button>
+                        <button class="lang-btn" data-lang="cpp">C++</button>
+                    </div>
+                </div>
+
+                <div class="panel-section stats-section">
+                    <h2 class="section-title">İstatistikler</h2>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <span class="stat-label">Karşılaştırma</span>
+                            <span class="stat-value" id="comparisons">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Değişim</span>
+                            <span class="stat-value" id="swaps">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Adım</span>
+                            <span class="stat-value" id="steps">0</span>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Visualization Area -->
+            <section class="visualization-area">
+                <div class="viz-header">
+                    <h2 class="viz-title" id="current-algorithm">Bubble Sort</h2>
+                    <div class="complexity-info">
+                        <span class="complexity-item">
+                            <span class="complexity-label">En İyi:</span>
+                            <span class="complexity-value" id="best-case">O(n)</span>
+                        </span>
+                        <span class="complexity-item">
+                            <span class="complexity-label">Ortalama:</span>
+                            <span class="complexity-value" id="avg-case">O(n²)</span>
+                        </span>
+                        <span class="complexity-item">
+                            <span class="complexity-label">En Kötü:</span>
+                            <span class="complexity-value" id="worst-case">O(n²)</span>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="canvas-container">
+                    <canvas id="visualization-canvas"></canvas>
+                </div>
+
+                <div class="code-display-container">
+                    <div class="code-header">
+                        <h3 class="code-title">Kaynak Kod</h3>
+                        <button class="toggle-code-btn" id="toggle-code">
+                            <span class="icon">📖</span>
+                            Kodu Göster/Gizle
+                        </button>
+                    </div>
+                    <div class="code-content" id="code-content">
+                        <pre><code id="code-display" class="language-javascript"></code></pre>
+                        <div class="current-line-indicator" id="current-line"></div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>
